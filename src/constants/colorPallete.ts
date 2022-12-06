@@ -21,7 +21,7 @@ type ColorPallete = Record<Colors, ColorValue> & {
 export const COLOR_PALLETE: ColorPallete = {
   PRIMARY: '#03a9f4',
   PRIMARY_TEXT: '#000000',
-  SECONDARY_TEXT: '#ffffff',
+  SECONDARY_TEXT: '#666666',
   BORDER: '#cccccc',
   BACKGROUND_LIGHT: '#ffffff',
   INPUT_TEXT: '#b5b3bd',

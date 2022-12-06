@@ -11,8 +11,5 @@ export const DIMENSIONS = {
   radius: 6,
   radiusLarge: 12,
   radiusXLarge: 36,
-  iconSize: 18,
-  smallIcon: 12,
-  cardHeight: 200,
-  bottomBarHeight: 64,
+  borderWidth: 1,
 };

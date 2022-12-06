@@ -7,6 +7,7 @@ export enum TextType {
   Caption = 'CAPTION',
   Caption2 = 'CAPTION_2',
   BodySmall = 'BODY_SMALL',
+  Caption3 = 'CAPTION_3',
 }
 
 interface TypographyFields {
@@ -61,6 +62,10 @@ export const TYPOGRAPHY: Readonly<Typography> = {
   },
   CAPTION_2: {
     fontSize: 16,
+    fontWeight: '700',
+  },
+  CAPTION_3: {
+    fontSize: 14,
     fontWeight: '700',
   },
 };

@@ -44,6 +44,11 @@ const layoutStyleMap = {
   },
 };
 
+const imageHeightMap = {
+  list: LIST_IMAGE_HEIGHT,
+  grid: GRID_IMAGE_HEIGHT,
+};
+
 const NewsListScreen: React.FC<Props> = props => {
   const [displayMode, setDisplayMode] = useState<'list' | 'grid'>('list');
 
@@ -54,9 +59,7 @@ const NewsListScreen: React.FC<Props> = props => {
       <NewsListItem
         newsData={item}
         style={customStyleObj}
-        imageHeight={
-          displayMode === 'grid' ? GRID_IMAGE_HEIGHT : LIST_IMAGE_HEIGHT
-        }
+        imageHeight={imageHeightMap[displayMode]}
       />
     );
   };

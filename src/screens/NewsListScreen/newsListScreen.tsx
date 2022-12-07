@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -9,6 +9,7 @@ import {
 import NewsListItem from '../../components/NewsListItem';
 import Selector from '../../components/Selector';
 import {DIMENSIONS} from '../../constants/dimensions';
+import datasources from '../../service';
 import {styles} from './styles';
 
 interface Props {}
@@ -51,6 +52,7 @@ const imageHeightMap = {
 
 const NewsListScreen: React.FC<Props> = props => {
   const [displayMode, setDisplayMode] = useState<'list' | 'grid'>('list');
+  const [newsItems, setNewsItems] = useState([]);
 
   const customStyleObj: ViewStyle = layoutStyleMap[displayMode];
 
@@ -64,6 +66,12 @@ const NewsListScreen: React.FC<Props> = props => {
     );
   };
 
+  useEffect(() => {
+    datasources.news
+      .getNewsList('india', 0)
+      .then(res => setNewsItems(res?.response?.docs));
+  }, []);
+
   return (
     <SafeAreaView style={styles.root}>
       <Selector
@@ -74,7 +82,7 @@ const NewsListScreen: React.FC<Props> = props => {
       />
       <FlatList
         key={displayMode}
-        data={data}
+        data={newsItems}
         extraData={displayMode} // to re-render on layout change
         numColumns={displayMode === 'grid' ? gridColumns : 1}
         keyExtractor={it => it._id}

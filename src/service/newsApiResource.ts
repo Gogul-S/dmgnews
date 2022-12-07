@@ -11,7 +11,7 @@ class NewsApiResource extends BaseApiResource {
   async getNewsList(searchQuery: string, page: number) {
     return this.get(
       `svc/search/v2/articlesearch.json?q=${searchQuery}&page=${page}`,
-    );
+    ).then(res => res?.response?.docs);
   }
 }
 

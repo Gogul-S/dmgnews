@@ -68,4 +68,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.memo(NewsListItem);
+export default React.memo(
+  NewsListItem,
+  (pre, curr) => pre.newsData._id === curr.newsData._id,
+);

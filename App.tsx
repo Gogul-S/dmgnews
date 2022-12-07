@@ -1,18 +1,15 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import {SafeAreaView} from 'react-native';
+import React from 'react';
+import {QueryClient, QueryClientProvider} from 'react-query';
 import NewsListScreen from './src/screens/NewsListScreen';
 
+const queryClient = new QueryClient();
+
 const App = () => {
-  return <NewsListScreen />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <NewsListScreen />
+    </QueryClientProvider>
+  );
 };
 
 export default App;

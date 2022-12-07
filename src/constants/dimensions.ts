@@ -12,4 +12,5 @@ export const DIMENSIONS = {
   radiusLarge: 12,
   radiusXLarge: 36,
   borderWidth: 1,
+  selectorHeight: 72,
 };

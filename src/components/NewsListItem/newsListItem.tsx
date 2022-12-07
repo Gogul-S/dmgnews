@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {Colors, COLOR_PALLETE} from '../../constants/colorPallete';
 import {DIMENSIONS} from '../../constants/dimensions';
 import {FALLBACK_IMAGE} from '../../constants/global';
@@ -9,22 +9,27 @@ import TextView from '../TextView';
 
 interface Props {
   newsData: any;
+  imageHeight?: number;
+  style?: StyleProp<ViewStyle>;
 }
 
 const NewsListItem: React.FC<Props> = props => {
-  const {newsData} = props;
+  const {newsData, style, imageHeight = 150} = props;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Image
-        style={styles.newsImage}
+        style={[styles.newsImage, {height: imageHeight}]}
         source={{
           uri: !!newsData.multimedia[0]?.url
             ? `http://www.nytimes.com/${newsData.multimedia[0]?.url}`
             : FALLBACK_IMAGE,
         }}
       />
-      <TextView style={styles.caption} textType={TextType.Caption2}>
+      <TextView
+        style={styles.caption}
+        textType={TextType.Caption2}
+        numberOfLines={2}>
         {newsData.headline.main}
       </TextView>
       <TextView
@@ -44,13 +49,12 @@ const NewsListItem: React.FC<Props> = props => {
 const styles = StyleSheet.create({
   container: {
     padding: DIMENSIONS.paddingNormal,
-    margin: DIMENSIONS.marginNormal,
     borderColor: COLOR_PALLETE[Colors.Border],
     borderWidth: DIMENSIONS.borderWidth,
     borderRadius: DIMENSIONS.radius,
+    marginTop: DIMENSIONS.marginNormal,
   },
   newsImage: {
-    height: 150,
     width: '100%',
   },
   caption: {

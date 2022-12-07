@@ -2,6 +2,7 @@ import {ColorValue} from 'react-native';
 
 export enum Colors {
   Primary = 'PRIMARY',
+  Secondary = 'SECONDARY',
   PrimaryText = 'PRIMARY_TEXT',
   SecondaryText = 'SECONDARY_TEXT',
   Border = 'BORDER',
@@ -12,6 +13,7 @@ export enum Colors {
   Text2 = 'TEXT2',
   Success = 'SUCCESS',
   MaterialBg = 'MATERIAL_BG',
+  LightText = 'LIGHT_TEXT',
 }
 
 type ColorPallete = Record<Colors, ColorValue> & {
@@ -19,9 +21,11 @@ type ColorPallete = Record<Colors, ColorValue> & {
 };
 
 export const COLOR_PALLETE: ColorPallete = {
-  PRIMARY: '#03a9f4',
+  PRIMARY: '#0d47a1',
+  SECONDARY: '#90caf9',
   PRIMARY_TEXT: '#000000',
   SECONDARY_TEXT: '#666666',
+  LIGHT_TEXT: '#ffffff',
   BORDER: '#cccccc',
   BACKGROUND_LIGHT: '#ffffff',
   INPUT_TEXT: '#b5b3bd',

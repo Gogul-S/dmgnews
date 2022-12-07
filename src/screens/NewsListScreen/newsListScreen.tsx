@@ -1,21 +1,79 @@
-import React from 'react';
-import {FlatList, ListRenderItemInfo, SafeAreaView, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Dimensions,
+  FlatList,
+  ListRenderItemInfo,
+  SafeAreaView,
+  ViewStyle,
+} from 'react-native';
 import NewsListItem from '../../components/NewsListItem';
-import TextView from '../../components/TextView';
-import {TextType} from '../../constants/typography';
+import Selector from '../../components/Selector';
+import {DIMENSIONS} from '../../constants/dimensions';
 import {styles} from './styles';
 
 interface Props {}
 
+const GRID_IMAGE_HEIGHT = 90;
+const LIST_IMAGE_HEIGHT = 150;
+
+// this can be also made dynamic; not implementing it as it is out of scope
+const gridColumns = 2;
+const gridMarginOffset = DIMENSIONS.marginNormal;
+
+const windowWidth = Dimensions.get('window').width;
+
+// static 2 is start and end margin offset
+const gridWidth =
+  (windowWidth - (gridColumns / 2 + 2) * gridMarginOffset) / gridColumns;
+
+const DISPLAY_OPTIONS = [
+  {value: 'list', label: 'List'},
+  {value: 'grid', label: 'Grid'},
+];
+
+// map of styles to layout items
+// can add other layout styles as well here
+const layoutStyleMap = {
+  list: {
+    marginTop: DIMENSIONS.marginNormal,
+    marginHorizontal: DIMENSIONS.marginNormal,
+  },
+  grid: {
+    width: gridWidth,
+    marginStart: DIMENSIONS.marginNormal,
+  },
+};
+
 const NewsListScreen: React.FC<Props> = props => {
-  const renderNewsItem = ({item}: ListRenderItemInfo<any>) => {
-    return <NewsListItem newsData={item} />;
+  const [displayMode, setDisplayMode] = useState<'list' | 'grid'>('list');
+
+  const customStyleObj: ViewStyle = layoutStyleMap[displayMode];
+
+  const renderNewsItem = ({item, index}: ListRenderItemInfo<any>) => {
+    return (
+      <NewsListItem
+        newsData={item}
+        style={customStyleObj}
+        imageHeight={
+          displayMode === 'grid' ? GRID_IMAGE_HEIGHT : LIST_IMAGE_HEIGHT
+        }
+      />
+    );
   };
 
   return (
     <SafeAreaView style={styles.root}>
+      <Selector
+        items={DISPLAY_OPTIONS}
+        value={displayMode}
+        onItemSelected={val => setDisplayMode(val as any)}
+        style={styles.viewSwitcher}
+      />
       <FlatList
+        key={displayMode}
         data={data}
+        extraData={displayMode} // to re-render on layout change
+        numColumns={displayMode === 'grid' ? gridColumns : 1}
         keyExtractor={it => it._id}
         renderItem={renderNewsItem}
         showsVerticalScrollIndicator={false}

@@ -1,4 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {useQueryClient} from '@tanstack/react-query';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -56,11 +57,12 @@ const NewsListScreen: React.FC<Props> = props => {
   const [displayMode, setDisplayMode] = useState<'list' | 'grid'>('list');
   const [newsItems, setNewsItems] = useState<NewsEntity[]>([]);
 
-  const pageNumber = useRef(0);
+  const [pageNumber, setPageNumber] = useState(0);
   const customStyleObj: ViewStyle = layoutStyleMap[displayMode];
 
-  const {data, isLoading, isFetching, fetchNextPage, isFetchingNextPage} =
-    useFetchNewsQuery('india');
+  const queryClient = useQueryClient();
+
+  const {data, isFetching, status} = useFetchNewsQuery(pageNumber, 'india');
 
   const renderNewsItem = ({item}: ListRenderItemInfo<NewsEntity>) => {
     return (
@@ -72,23 +74,17 @@ const NewsListScreen: React.FC<Props> = props => {
     );
   };
 
+  useEffect(() => {}, [pageNumber]);
+
   const onEndReached = () => {
-    if (!isFetching && !isFetchingNextPage) {
-      pageNumber.current = pageNumber.current + 1;
-      fetchNextPage({
-        pageParam: pageNumber.current,
-      });
+    if (!isFetching) {
+      setPageNumber(pageNumber + 1);
     }
   };
 
   useEffect(() => {
-    if (data && data.pages?.length > 0) {
-      setNewsItems(
-        data.pages.reduce((acc, pag) => {
-          if (pag) return [...acc, ...pag];
-          else return acc;
-        }, []),
-      );
+    if (data && data.length > 0) {
+      setNewsItems([...newsItems, ...data]);
     }
   }, [data]);
 
@@ -110,7 +106,7 @@ const NewsListScreen: React.FC<Props> = props => {
         showsVerticalScrollIndicator={false}
         onEndReached={onEndReached}
       />
-      {(isLoading || isFetching) && <ActivityIndicator />}
+      {isFetching && <ActivityIndicator />}
     </SafeAreaView>
   );
 };

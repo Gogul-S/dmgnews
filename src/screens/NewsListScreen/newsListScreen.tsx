@@ -54,7 +54,7 @@ const imageHeightMap = {
 
 const NewsListScreen: React.FC<Props> = props => {
   const [displayMode, setDisplayMode] = useState<'list' | 'grid'>('list');
-  const [newsItems, setNewsItems] = useState([]);
+  const [newsItems, setNewsItems] = useState<NewsEntity[]>([]);
 
   const [pageNumber, setPageNumber] = useState(0);
   const customStyleObj: ViewStyle = layoutStyleMap[displayMode];
@@ -79,7 +79,7 @@ const NewsListScreen: React.FC<Props> = props => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      setNewsItems([...newsItems, ...(data as [])]);
+      setNewsItems([...newsItems, ...data]);
     }
   }, [data]);
 
@@ -92,7 +92,7 @@ const NewsListScreen: React.FC<Props> = props => {
         style={styles.viewSwitcher}
       />
       <FlatList
-        key={displayMode}
+        key={displayMode} // to re-render on layout change
         data={newsItems}
         extraData={displayMode} // to re-render on layout change
         numColumns={displayMode === 'grid' ? gridColumns : 1}

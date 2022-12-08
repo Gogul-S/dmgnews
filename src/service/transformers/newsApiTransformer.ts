@@ -1,8 +1,9 @@
 import moment from 'moment';
+import {ASSET_BASE_URL} from '../../constants/global';
 import {NewsEntity} from '../../types/news';
-import {FALLBACK_IMAGE} from '../../constants/global';
 
-const ASSET_BASE_URL = 'http://www.nytimes.com';
+const FALLBACK_IMAGE =
+  'https://thumbs.dreamstime.com/b/news-newspapers-folded-stacked-word-wooden-block-puzzle-dice-concept-newspaper-media-press-release-42301371.jpg';
 
 export const transformNewsApi = (data: any): NewsEntity => {
   return {

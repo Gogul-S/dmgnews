@@ -1,4 +1,4 @@
-import {useQuery} from 'react-query';
+import {useQuery} from '@tanstack/react-query';
 import datasources from '../service';
 import {NewsEntity} from '../types/news';
 
@@ -10,6 +10,5 @@ export const useFetchNewsQuery = (page: number) => {
   return useQuery<NewsEntity[], string>({
     queryKey: [KEYS.NEWS_LIST_QUERY, page],
     queryFn: () => datasources.news.getNewsList('india', page),
-    keepPreviousData: true,
   });
 };

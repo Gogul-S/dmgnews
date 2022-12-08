@@ -1,4 +1,3 @@
-import {useQueryClient} from '@tanstack/react-query';
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -60,9 +59,7 @@ const NewsListScreen: React.FC<Props> = props => {
   const [pageNumber, setPageNumber] = useState(0);
   const customStyleObj: ViewStyle = layoutStyleMap[displayMode];
 
-  const queryClient = useQueryClient();
-
-  const {data, isFetching, status} = useFetchNewsQuery(pageNumber, 'india');
+  const {data, isFetching} = useFetchNewsQuery(pageNumber, 'india');
 
   const renderNewsItem = ({item}: ListRenderItemInfo<NewsEntity>) => {
     return (
@@ -73,8 +70,6 @@ const NewsListScreen: React.FC<Props> = props => {
       />
     );
   };
-
-  useEffect(() => {}, [pageNumber]);
 
   const onEndReached = () => {
     if (!isFetching) {

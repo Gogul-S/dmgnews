@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -56,10 +56,11 @@ const NewsListScreen: React.FC<Props> = props => {
   const [displayMode, setDisplayMode] = useState<'list' | 'grid'>('list');
   const [newsItems, setNewsItems] = useState<NewsEntity[]>([]);
 
-  const [pageNumber, setPageNumber] = useState(0);
+  const pageNumber = useRef(0);
   const customStyleObj: ViewStyle = layoutStyleMap[displayMode];
 
-  const {data, isLoading, isFetching} = useFetchNewsQuery(pageNumber);
+  const {data, isLoading, isFetching, fetchNextPage, isFetchingNextPage} =
+    useFetchNewsQuery('india');
 
   const renderNewsItem = ({item}: ListRenderItemInfo<NewsEntity>) => {
     return (
@@ -72,14 +73,22 @@ const NewsListScreen: React.FC<Props> = props => {
   };
 
   const onEndReached = () => {
-    if (!isFetching) {
-      setPageNumber(pageNumber + 1);
+    if (!isFetching && !isFetchingNextPage) {
+      pageNumber.current = pageNumber.current + 1;
+      fetchNextPage({
+        pageParam: pageNumber.current,
+      });
     }
   };
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      setNewsItems([...newsItems, ...data]);
+    if (data && data.pages?.length > 0) {
+      setNewsItems(
+        data.pages.reduce((acc, pag) => {
+          if (pag) return [...acc, ...pag];
+          else return acc;
+        }, []),
+      );
     }
   }, [data]);
 

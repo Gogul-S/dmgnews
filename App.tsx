@@ -14,12 +14,14 @@ const queryClient = new QueryClient({
   },
 });
 
+// persist react query cache in async storage
 const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
 });
 
 const App = () => {
   useEffect(() => {
+    // refetches automatically when device is connected to internet
     onlineManager.setEventListener(setOnline => {
       return NetInfo.addEventListener(state => {
         setOnline(!!state.isConnected);

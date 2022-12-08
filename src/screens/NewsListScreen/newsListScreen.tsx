@@ -11,6 +11,7 @@ import NewsListItem from '../../components/NewsListItem';
 import Selector from '../../components/Selector';
 import {DIMENSIONS} from '../../constants/dimensions';
 import {useFetchNewsQuery} from '../../query/newsQueries';
+import {NewsEntity} from '../../types/news';
 import {styles} from './styles';
 
 interface Props {}
@@ -60,7 +61,7 @@ const NewsListScreen: React.FC<Props> = props => {
 
   const {data, isLoading, isFetching} = useFetchNewsQuery(pageNumber);
 
-  const renderNewsItem = ({item, index}: ListRenderItemInfo<any>) => {
+  const renderNewsItem = ({item}: ListRenderItemInfo<NewsEntity>) => {
     return (
       <NewsListItem
         newsData={item}
@@ -78,7 +79,7 @@ const NewsListScreen: React.FC<Props> = props => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      setNewsItems([...newsItems, ...data]);
+      setNewsItems([...newsItems, ...(data as [])]);
     }
   }, [data]);
 
@@ -95,7 +96,7 @@ const NewsListScreen: React.FC<Props> = props => {
         data={newsItems}
         extraData={displayMode} // to re-render on layout change
         numColumns={displayMode === 'grid' ? gridColumns : 1}
-        keyExtractor={it => it._id}
+        keyExtractor={it => it.id.toString()}
         renderItem={renderNewsItem}
         showsVerticalScrollIndicator={false}
         onEndReached={onEndReached}

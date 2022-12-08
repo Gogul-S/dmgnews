@@ -1,14 +1,13 @@
-import moment from 'moment';
 import React from 'react';
 import {Image, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {Colors, COLOR_PALLETE} from '../../constants/colorPallete';
 import {DIMENSIONS} from '../../constants/dimensions';
-import {FALLBACK_IMAGE} from '../../constants/global';
 import {TextType} from '../../constants/typography';
+import {NewsEntity} from '../../types/news';
 import TextView from '../TextView';
 
 interface Props {
-  newsData: any;
+  newsData: NewsEntity;
   imageHeight?: number;
   style?: StyleProp<ViewStyle>;
 }
@@ -16,31 +15,31 @@ interface Props {
 const NewsListItem: React.FC<Props> = props => {
   const {newsData, style, imageHeight = 150} = props;
 
+  const {caption, dateLabel, snippet, imageurl} = newsData;
+
   return (
     <View style={[styles.container, style]}>
       <Image
         style={[styles.newsImage, {height: imageHeight}]}
         source={{
-          uri: !!newsData.multimedia[0]?.url
-            ? `http://www.nytimes.com/${newsData.multimedia[0]?.url}`
-            : FALLBACK_IMAGE,
+          uri: imageurl,
         }}
       />
       <TextView
         style={styles.caption}
         textType={TextType.Caption2}
         numberOfLines={2}>
-        {newsData.headline.main}
+        {caption}
       </TextView>
       <TextView
         style={styles.snippet}
         textType={TextType.Body}
         color={Colors.SecondaryText}
         numberOfLines={3}>
-        {newsData.snippet}
+        {snippet}
       </TextView>
       <TextView style={styles.date} textType={TextType.Caption3}>
-        {moment(newsData.pub_date).format('DD MMM YYYY')}
+        {dateLabel}
       </TextView>
     </View>
   );
@@ -56,6 +55,7 @@ const styles = StyleSheet.create({
   },
   newsImage: {
     width: '100%',
+    borderRadius: DIMENSIONS.radius,
   },
   caption: {
     marginTop: DIMENSIONS.marginMedium,
@@ -70,5 +70,5 @@ const styles = StyleSheet.create({
 
 export default React.memo(
   NewsListItem,
-  (pre, curr) => pre.newsData._id === curr.newsData._id,
+  (pre, curr) => pre.newsData.id === curr.newsData.id,
 );
